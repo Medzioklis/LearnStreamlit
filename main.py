@@ -1,23 +1,26 @@
+import streamlit as st                                                       #
 import functions.login_functions as fl
 import functions.menu_functions as fm
 
 def main():
     fl.create_initial_fakeadmin()
 
-    print("\n======= Bibliotekos sistema =======\n")
-    username = input("Įveskite kortelės numerį: ")
-    password = input("Įveskite slaptažodį: ")
+    st.title("Bibliotekos sistema")                                          #
 
-    user = fl.login(username, password)
-    if user:
-        print(f"\nSveiki, {user.user_name}! Jūsų rolė: {user.user_role}")
-        print("-" * 70)
+    username = st.text_input("Įveskite kortelės numerį:")
+    password = st.text_input("Įveskite slaptažodį: ", type = "password")
+
+    if st.button("Prisijungti"):
+        user = fl.login(username, password)
+        if user:
+            st.success(f"\nSveiki, {user.user_name}! Jūsų rolė: {user.user_role}")
+        
         if user.user_role == "bibliotekininkas":
             fm.librarian_menu()
         else:
             fm.reader_menu(user)
     else:
-        print("Neteisingas kortelės numeris arba slaptažodis.")
+        st.error("Neteisingas kortelės numeris arba slaptažodis.")
 
 main()
 
